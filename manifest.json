@@ -1,0 +1,124 @@
+{
+  "name": "Bookmarks for X - Organizer, Vault & AI Chat",
+  "short_name": "Bookmarks X",
+  "description": "Stop Saving. Start Using. AI-powered bookmark manager for X. Chat with your bookmarks, auto-organize, back up to cloud, and remove from X directly.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["productivity", "utilities", "social"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screen1.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "label": "Chat with your bookmarks using AI"
+    },
+    {
+      "src": "/screenshots/screen2.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "label": "Auto-organize into smart folders"
+    },
+    {
+      "src": "/screenshots/screen3.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "label": "Back up to Google Drive, iCloud, Notion and more"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Vault",
+      "short_name": "Vault",
+      "description": "View your saved bookmarks",
+      "url": "/?tab=vault",
+      "icons": [
+        {
+          "src": "/icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "AI Chat",
+      "short_name": "Chat",
+      "description": "Chat with your bookmarks",
+      "url": "/?tab=chat",
+      "icons": [
+        {
+          "src": "/icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Search X",
+      "short_name": "Search",
+      "description": "Find and bookmark content on X",
+      "url": "/?tab=search",
+      "icons": [
+        {
+          "src": "/icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
