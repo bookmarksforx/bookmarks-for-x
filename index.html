@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bookmarks X">
+<meta name="description" content="Stop Saving. Start Using. AI-powered bookmark manager for X. Chat with your bookmarks, auto-organize, back up to cloud, and remove from X directly.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="/icons/144.png">
+<meta name="msapplication-config" content="/browserconfig.xml">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/152.png">
+<link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/icons/60.png">
+<link rel="apple-touch-icon" sizes="87x87" href="/icons/87.png">
+<link rel="apple-touch-icon" sizes="100x100" href="/icons/100.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/icons/114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/152.png">
+<link rel="icon" type="image/png" sizes="57x57" href="/icons/57.png">
+<link rel="icon" type="image/png" sizes="100x100" href="/icons/100.png">
+<link rel="shortcut icon" href="/icons/57.png">
+<title>Bookmarks for X — Stop Saving. Start Using.</title>
+<style>
+/* ═══════════════════════════════════════════════
+   BOOKMARKS FOR X
+   Epiphany Apps — All Rights Reserved
+   Stop Saving. Start Using.
+═══════════════════════════════════════════════ */
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+:root{
+  --bg:#000;
+  --surface:#0a0a0a;
+  --surface2:#111;
+  --border:#1a1a1a;
+  --border2:#222;
+  --text:#fff;
+  --text2:#aaa;
+  --text3:#777;
+  --text4:#555;
+  --accent:#fff;
+  --danger:#c0392b;
+  --success:#27ae60;
+  --warning:#e67e22;
+}
+.hide{display:none!important}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar{width:0;height:0}
+
+/* ── BUTTONS ── */
+.btn{display:flex;align-items:center;justify-content:center;border-radius:28px;padding:16px;font-size:16px;font-weight:800;width:100%;max-width:340px;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn-white{background:#fff;color:#000}
+.btn-white:active{opacity:.8}
+.btn-outline{background:none;border:2px solid #fff;color:#fff}
+.btn-outline:active{background:#111}
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--text3)}
+.btn-ghost:active{background:var(--surface)}
+.btn-sm{padding:10px 22px;font-size:14px;border-radius:22px;width:auto;max-width:none}
+.btn-danger{background:var(--danger);color:#fff}
+
+/* ── INPUTS ── */
+.inp{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;color:#fff;font-size:15px;font-family:inherit;outline:none;transition:border-color .15s;-webkit-appearance:none}
+.inp:focus{border-color:#444}
+.inp::placeholder{color:var(--text4)}
+.inp.mono{font-family:monospace;font-size:14px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(80px);background:#fff;color:#000;padding:10px 22px;border-radius:24px;font-size:14px;font-weight:700;transition:transform .25s;z-index:9999;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ══════════════════════════════════════════════
+   SPLASH SCREEN
+══════════════════════════════════════════════ */
+#splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;z-index:9000;transition:opacity .8s ease}
+#splash.fade{opacity:0;pointer-events:none}
+.splash-logo{display:flex;align-items:center;gap:18px}
+.splash-slogan{font-size:12px;font-weight:600;color:#333;letter-spacing:3px;text-transform:uppercase;transition:color 1.5s ease}
+.splash-slogan.show{color:#666}
+
+/* ══════════════════════════════════════════════
+   MARKETING SLIDES
+══════════════════════════════════════════════ */
+#marketing{display:none;flex-direction:column;height:100vh;overflow:hidden;position:relative}
+.mkt-nav{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;z-index:10}
+.mkt-nav-btn{background:none;border:none;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;font-family:inherit;padding:8px 4px}
+.mkt-nav-btn:active{color:#fff}
+.slides{display:flex;height:100%;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform}
+.slide{min-width:100vw;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 120px;gap:20px;text-align:center;overflow-y:auto}
+.slide-logo{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.slide-title{font-size:30px;font-weight:900;line-height:1.08;letter-spacing:-1px;color:#fff}
+.slide-title span{color:#fff}
+.slide-sub{font-size:14px;color:var(--text2);line-height:1.65;max-width:300px}
+.slide-cta{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);width:calc(100% - 48px);max-width:340px}
+.dots{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border2);transition:all .3s}
+.dot.on{background:#fff;width:18px;border-radius:3px}
+
+/* pain points */
+.pain-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;text-align:left}
+.pain-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.pain-item .pi-icon{font-size:20px;flex-shrink:0;line-height:1.3}
+.pain-item .pi-text{font-size:13px;color:var(--text2);line-height:1.45}
+.pain-item .pi-text strong{color:#fff;display:block;margin-bottom:2px;font-size:14px}
+
+/* feature list */
+.feat-list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px;text-align:left}
+.feat-item{display:flex;gap:14px;align-items:flex-start}
+.feat-icon{width:42px;height:42px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.feat-text h4{font-size:14px;font-weight:700;margin-bottom:3px;color:#fff}
+.feat-text p{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* chat demo slide */
+.chat-demo{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+.chat-demo-header{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);background:#0d0d0d}
+.chat-demo-header .ai-badge{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.chat-demo-header .connected{margin-left:auto;font-size:11px;color:var(--success);display:flex;align-items:center;gap:4px}
+.chat-demo-header .connected::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block}
+.chat-demo-body{padding:14px}
+.chat-bubble-user{background:#fff;color:#000;border-radius:14px 14px 3px 14px;padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px;display:inline-block;max-width:90%;line-height:1.5}
+.chat-steps{display:flex;flex-direction:column;gap:7px}
+.chat-step{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:#0d0d0d;border-radius:10px}
+.step-check{width:20px;height:20px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px}
+.step-text h5{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+.step-text p{font-size:11px;color:var(--text3)}
+.chat-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.chat-action-btn{font-size:11px;font-weight:700;padding:6px 10px;border-radius:8px;border:1px solid var(--border2);color:var(--text2);background:var(--surface);cursor:pointer;font-family:inherit}
+
+/* backup grid */
+.backup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:340px}
+.backup-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.backup-item span{font-size:11px;color:var(--text3);font-weight:600;text-align:center}
+
+/* use cases */
+.usecase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:340px;text-align:left}
+.usecase{padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.usecase h4{font-size:12px;font-weight:700;margin-bottom:3px;color:#fff}
+.usecase p{font-size:11px;color:var(--text3);line-height:1.4}
+
+/* trust bar */
+.trust-bar{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;width:100%;max-width:340px;padding:12px 0}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+
+/* ══════════════════════════════════════════════
+   PRICING SCREEN
+══════════════════════════════════════════════ */
+#pricing{display:none;flex-direction:column;min-height:100vh;overflow-y:auto;align-items:center;padding:60px 24px 40px}
+.pricing-back{position:fixed;top:16px;left:20px;font-size:13px;font-weight:700;color:var(--text3);background:none;border:none;cursor:pointer;font-family:inherit}
+.pricing-back:active{color:#fff}
+.pricing-title{font-size:26px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px;text-align:center}
+.pricing-sub{font-size:13px;color:var(--text3);margin-bottom:24px;text-align:center}
+.plan-cards{display:flex;flex-direction:column;gap:14px;width:100%;max-width:360px}
+.plan-card{border:1px solid var(--border2);border-radius:18px;padding:22px;position:relative;cursor:pointer;transition:border-color .2s}
+.plan-card:active{background:var(--surface)}
+.plan-card.featured{border-color:#fff}
+.plan-badge{position:absolute;top:-11px;left:18px;background:#fff;color:#000;font-size:10px;font-weight:800;padding:3px 12px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px}
+.plan-name{font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.plan-price{font-size:32px;font-weight:900;letter-spacing:-1.5px;margin-bottom:14px}
+.plan-price sub{font-size:14px;font-weight:400;color:var(--text3);letter-spacing:0}
+.plan-features{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.plan-feat{font-size:13px;color:var(--text3);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.plan-feat.on{color:var(--text2)}
+.plan-feat.on::before{content:'✓';color:#fff;font-weight:800;flex-shrink:0}
+.plan-feat:not(.on)::before{content:'✓';color:var(--border2);flex-shrink:0}
+.plan-agree{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:var(--surface);border-radius:10px}
+.plan-agree input[type=checkbox]{width:18px;height:18px;flex-shrink:0;accent-color:#fff;margin-top:1px;cursor:pointer}
+.plan-agree label{font-size:12px;color:var(--text3);line-height:1.5;cursor:pointer}
+.plan-agree label a{color:var(--text2);text-decoration:underline}
+.plan-btn{width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:800;border:none;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.plan-btn-white{background:#fff;color:#000}
+.plan-btn-white:active{opacity:.8}
+.plan-btn-outline{background:none;border:2px solid var(--border2);color:var(--text2)}
+.plan-btn-outline:active{border-color:#fff;color:#fff}
+
+/* ══════════════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════════════ */
+#login{display:none;flex-direction:column;min-height:100vh;align-items:center;justify-content:center;padding:48px 24px;gap:20px}
+.login-logo{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.login-title{font-size:24px;font-weight:900;letter-spacing:-0.5px}
+.login-sub{font-size:13px;color:var(--text3);text-align:center;line-height:1.6;max-width:280px}
+.login-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px}
+.login-btn{display:flex;align-items:center;justify-content:center;gap:12px;padding:15px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:var(--surface);color:#fff;font-family:inherit;width:100%;transition:background .15s}
+.login-btn:active{background:var(--surface2)}
+.login-divider{font-size:12px;color:var(--text4);text-align:center;letter-spacing:1px}
+.login-back{background:none;border:none;color:var(--text4);font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px}
+.login-back:active{color:#fff}
+.login-privacy{font-size:11px;color:var(--text4);text-align:center;max-width:280px;line-height:1.6}
+.login-privacy a{color:var(--text3);text-decoration:underline}
+
+/* ══════════════════════════════════════════════
+   BYOK SETUP SCREEN
+══════════════════════════════════════════════ */
+#byok{display:none;flex-direction:column;min-height:100vh;overflow-y:auto;align-items:center;padding:60px 24px 40px;gap:16px}
+.byok-back{position:fixed;top:16px;left:20px;font-size:13px;font-weight:700;color:var(--text3);background:none;border:none;cursor:pointer;font-family:inherit}
+.byok-back:active{color:#fff}
+.byok-logo{display:flex;align-items:center;gap:12px}
+.byok-title{font-size:22px;font-weight:900}
+.byok-sub{font-size:13px;color:var(--text3);text-align:center;line-height:1.65;max-width:300px}
+.field-group{width:100%;max-width:340px;display:flex;flex-direction:column;gap:6px}
+.field-label{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.field-saved{color:var(--success);font-size:11px;display:none}
+.field-hint{font-size:11px;color:var(--text4);line-height:1.55}
+.field-hint a{color:var(--text3);text-decoration:underline}
+.field-error{font-size:11px;color:#e74c3c;display:none;margin-top:2px}
+.byok-err{color:#e74c3c;font-size:13px;display:none;text-align:center;max-width:340px}
+.no-train{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:340px}
+.no-train span{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* ══════════════════════════════════════════════
+   FOLDER SETUP SCREEN
+══════════════════════════════════════════════ */
+#folderSetup{display:none;flex-direction:column;min-height:100vh;overflow-y:auto;align-items:center;padding:60px 24px 40px;gap:16px}
+.folder-opts{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px}
+.folder-opt{display:flex;align-items:flex-start;gap:14px;padding:16px;border:1px solid var(--border2);border-radius:14px;cursor:pointer;background:var(--surface);transition:border-color .2s}
+.folder-opt.sel{border-color:#fff}
+.folder-opt-icon{font-size:24px;flex-shrink:0;line-height:1.2}
+.folder-opt-text h4{font-size:14px;font-weight:700;margin-bottom:3px;color:#fff}
+.folder-opt-text p{font-size:12px;color:var(--text3);line-height:1.45}
+.folder-confirm{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:16px;display:none;flex-direction:column;gap:10px}
+.folder-confirm h4{font-size:11px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px}
+.folder-tags{display:flex;flex-wrap:wrap;gap:6px}
+.folder-tag{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border2);border-radius:16px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text2)}
+.folder-tag-x{background:none;border:none;color:var(--text4);cursor:pointer;font-size:14px;line-height:1;padding:0}
+.folder-tag-x:active{color:#e74c3c}
+.folder-add-row{display:flex;gap:8px}
+.folder-add-inp{flex:1;background:#000;border:1px solid var(--border2);border-radius:10px;padding:9px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;min-width:0}
+.folder-add-inp::placeholder{color:var(--text4)}
+.folder-add-btn{background:#fff;color:#000;border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0}
+
+/* ══════════════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════════════ */
+#app{display:none;flex-direction:column;height:100vh;position:relative}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:#000;flex-shrink:0;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.top-btn{background:none;border:1px solid var(--border2);color:var(--text3);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.top-btn:active{background:var(--surface);color:#fff}
+.user-avatar{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:var(--surface2);flex-shrink:0}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+
+/* tab content area */
+.tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.tab-pane{display:none;flex-direction:column;flex:1;overflow:hidden}
+.tab-pane.active{display:flex}
+
+/* bottom nav */
+.bottom-nav{display:flex;border-top:1px solid var(--border);background:#000;flex-shrink:0;position:sticky;bottom:0;z-index:100}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 8px 14px;background:none;border:none;cursor:pointer;font-family:inherit;transition:color .15s}
+.nav-btn svg,.nav-btn .nav-icon{opacity:.35;transition:opacity .15s}
+.nav-btn span{font-size:10px;font-weight:700;color:var(--text4);transition:color .15s;letter-spacing:.3px}
+.nav-btn.active svg,.nav-btn.active .nav-icon{opacity:1}
+.nav-btn.active span{color:#fff}
+
+/* ══════════════════════════════════════════════
+   VAULT TAB
+══════════════════════════════════════════════ */
+#vaultPane .vault-search{padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+#vaultPane .vault-search input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:10px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none}
+#vaultPane .vault-search input::placeholder{color:var(--text4)}
+#vaultPane .vault-search input:focus{border-color:#333}
+
+.folder-tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);flex-shrink:0;scrollbar-width:none;padding:0 4px}
+.folder-tabs::-webkit-scrollbar{display:none}
+.folder-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--text4);padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.folder-tab.active{color:#fff;border-bottom-color:#fff}
+.folder-mgr-btn{background:none;border:none;color:var(--text4);padding:10px 12px;font-size:16px;cursor:pointer;flex-shrink:0}
+.folder-mgr-btn:active{color:#fff}
+
+.vault-status{padding:6px 16px;font-size:11px;color:var(--text4);flex-shrink:0;display:flex;align-items:center;gap:8px}
+.vault-status .bm-counter{margin-left:auto;font-size:11px;font-weight:700}
+.vault-status .bm-counter.warn{color:var(--warning)}
+.vault-status .bm-counter.danger{color:#e74c3c}
+
+#bm-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bm-empty{text-align:center;padding:80px 24px;color:var(--text4);font-size:15px;line-height:1.8}
+
+/* bookmark card */
+.bm-card{padding:14px 16px;border-bottom:1px solid #0d0d0d;transition:background .1s}
+.bm-card:active{background:var(--surface)}
+.bm-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.bm-author{display:flex;flex-direction:column}
+.bm-name{font-size:14px;font-weight:700;color:#fff}
+.bm-handle{font-size:12px;color:var(--text4)}
+.bm-date{font-size:11px;color:var(--text4);flex-shrink:0;padding-left:8px;margin-top:2px}
+.bm-text{font-size:14px;line-height:1.55;color:var(--text2);word-break:break-word;margin:5px 0 8px}
+.bm-link{font-size:12px;color:var(--text3);text-decoration:underline;word-break:break-all;display:block;margin-bottom:8px}
+.bm-link:active{color:#fff}
+.bm-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.bm-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:3px 9px;border-radius:8px;border:1px solid var(--border2);color:var(--text3)}
+.bm-badge.thread{border-color:#2c3e50;color:#7f8c8d}
+.bm-badge.video{border-color:#922b21;color:#e74c3c}
+.bm-actions{display:flex;gap:6px;flex-wrap:wrap}
+.bm-action{background:none;border:1px solid var(--border2);color:var(--text3);border-radius:14px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.bm-action:active{border-color:#555;color:#fff}
+.bm-action.danger:active{border-color:#e74c3c;color:#e74c3c}
+
+/* ══════════════════════════════════════════════
+   SEARCH X TAB
+══════════════════════════════════════════════ */
+#searchPane{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.search-area{padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:8px}
+.search-area input{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:10px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-width:0}
+.search-area input::placeholder{color:var(--text4)}
+.search-area input:focus{border-color:#333}
+.search-area button{background:#fff;color:#000;border:none;border-radius:22px;padding:10px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0}
+.search-area button:active{opacity:.8}
+.search-results{flex:1;overflow-y:auto}
+.search-empty{text-align:center;padding:60px 24px;color:var(--text4);font-size:14px;line-height:1.8}
+.search-card{padding:14px 16px;border-bottom:1px solid #0d0d0d}
+.search-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.search-card-author{font-size:14px;font-weight:700}
+.search-card-handle{font-size:12px;color:var(--text4)}
+.search-card-text{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:10px;word-break:break-word}
+.search-bm-btn{background:none;border:1px solid var(--border2);color:var(--text3);border-radius:14px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.search-bm-btn:active{border-color:#fff;color:#fff}
+.search-bm-btn.saved{border-color:var(--success);color:var(--success)}
+.search-api-notice{margin:16px;padding:14px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;font-size:13px;color:var(--text3);line-height:1.6}
+
+/* ══════════════════════════════════════════════
+   AI CHAT TAB
+══════════════════════════════════════════════ */
+#chatPane{position:relative}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.chat-ai-label{display:flex;align-items:center;gap:8px}
+.chat-ai-name{font-size:15px;font-weight:800}
+.chat-ai-sub{font-size:11px;color:var(--text4)}
+.chat-counter{font-size:11px;color:var(--text4);background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:4px 10px}
+.chat-counter.warn{color:var(--warning);border-color:var(--warning)}
+.chat-counter.danger{color:#e74c3c;border-color:#e74c3c}
+
+.chat-messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-welcome{text-align:center;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.chat-welcome-logo{opacity:.3}
+.chat-welcome h3{font-size:18px;font-weight:800;color:#fff}
+.chat-welcome p{font-size:13px;color:var(--text3);line-height:1.6;max-width:260px}
+.chat-no-train{font-size:11px;color:var(--text4);display:flex;align-items:center;gap:5px;margin-top:4px}
+
+/* rotating prompts */
+.prompt-suggestions{display:flex;overflow-x:auto;gap:8px;padding:0 16px 12px;flex-shrink:0;scrollbar-width:none}
+.prompt-suggestions::-webkit-scrollbar{display:none}
+.prompt-chip{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;transition:all .15s}
+.prompt-chip:active{border-color:#fff;color:#fff}
+
+/* message bubbles */
+.msg{display:flex;flex-direction:column;gap:3px;max-width:85%}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.ai{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.6;word-break:break-word}
+.msg.user .msg-bubble{background:#fff;color:#000;border-radius:18px 18px 4px 18px}
+.msg.ai .msg-bubble{background:var(--surface);border:1px solid var(--border2);color:var(--text2);border-radius:4px 18px 18px 18px}
+.msg-sender{font-size:11px;color:var(--text4);padding:0 4px}
+
+/* typing indicator */
+.typing-indicator{display:flex;align-items:center;gap:4px;padding:12px 16px;background:var(--surface);border:1px solid var(--border2);border-radius:4px 18px 18px 18px;width:fit-content}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--text4);animation:typingBounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* step progress UI */
+.step-progress{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;width:100%;max-width:320px}
+.step-row{display:flex;align-items:flex-start;gap:10px}
+.step-indicator{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .3s}
+.step-indicator.pending{background:var(--border2)}
+.step-indicator.active{background:var(--warning);animation:pulse 1s infinite}
+.step-indicator.done{background:var(--success)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.step-info h5{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.step-info p{font-size:12px;color:var(--text3)}
+.step-complete{background:#0d2b1a;border:1px solid #1a5c35;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--success)}
+.step-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.step-btn{font-size:12px;font-weight:700;padding:7px 12px;border-radius:10px;border:1px solid var(--border2);color:var(--text2);background:var(--surface);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:all .15s}
+.step-btn:active{border-color:#fff;color:#fff}
+
+/* chat input */
+.chat-input-area{padding:10px 14px 12px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px;align-items:flex-end;background:#000}
+.chat-input-wrap{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:22px;display:flex;align-items:flex-end;padding:2px 4px 2px 14px;transition:border-color .15s}
+.chat-input-wrap:focus-within{border-color:#333}
+#chatInput{flex:1;background:none;border:none;color:#fff;font-size:14px;font-family:inherit;outline:none;resize:none;padding:10px 0;max-height:100px;line-height:1.5}
+#chatInput::placeholder{color:var(--text4)}
+.chat-send-btn{width:36px;height:36px;border-radius:50%;background:#fff;color:#000;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s;margin-bottom:1px}
+.chat-send-btn:active{opacity:.7}
+.chat-send-btn:disabled{opacity:.3;cursor:default}
+
+/* ══════════════════════════════════════════════
+   SETTINGS SCREEN
+══════════════════════════════════════════════ */
+#settings{display:none;flex-direction:column;height:100vh}
+.settings-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.settings-back{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0;flex-shrink:0}
+.settings-back:active{color:#fff}
+.settings-title{font-size:17px;font-weight:800}
+.settings-body{flex:1;overflow-y:auto}
+.settings-section{padding:20px 16px 4px}
+.settings-section-title{font-size:11px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.settings-item:last-child{border-bottom:none}
+.settings-item-left{display:flex;flex-direction:column;gap:3px}
+.settings-item-label{font-size:15px;font-weight:600;color:#fff}
+.settings-item-sub{font-size:12px;color:var(--text3)}
+.settings-item-right{font-size:13px;color:var(--text3);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.settings-chevron{color:var(--text4);font-size:16px}
+.settings-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--border2);color:var(--text2)}
+.settings-badge.pro{border-color:#f39c12;color:#f39c12}
+.settings-footer{padding:24px 16px;text-align:center}
+.settings-footer p{font-size:11px;color:var(--text4);line-height:1.8;letter-spacing:.3px;text-transform:uppercase}
+
+/* ══════════════════════════════════════════════
+   FOLDER MANAGER OVERLAY
+══════════════════════════════════════════════ */
+#folderManager{display:none;position:fixed;inset:0;background:#000;z-index:500;flex-direction:column}
+.fm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.fm-title{font-size:17px;font-weight:800}
+.fm-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer}
+.fm-close:active{color:#fff}
+.fm-list{flex:1;overflow-y:auto;padding:8px 0}
+.fm-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.fm-item-left{display:flex;flex-direction:column;gap:3px}
+.fm-item-name{font-size:15px;font-weight:600}
+.fm-item-count{font-size:12px;color:var(--text3)}
+.fm-item-actions{display:flex;gap:8px}
+.fm-btn{background:none;border:1px solid var(--border2);color:var(--text3);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.fm-btn:active{border-color:#fff;color:#fff}
+.fm-btn.danger:active{border-color:#e74c3c;color:#e74c3c}
+.fm-add{padding:16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.fm-add input{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-width:0}
+.fm-add input::placeholder{color:var(--text4)}
+.fm-add button{background:#fff;color:#000;border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+
+/* ══════════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════════ */
+#modalOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;align-items:flex-end;justify-content:center}
+.modal-sheet{background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px 50px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-size:17px;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text3);margin-bottom:18px;line-height:1.5}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.modal-divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+.modal-btns{display:flex;gap:10px;margin-top:20px}
+.modal-btns button{flex:1;padding:14px;border-radius:24px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;border:none}
+.modal-save{background:#fff;color:#000}
+.modal-save:active{opacity:.8}
+.modal-cancel{background:none;border:1px solid var(--border2)!important;color:var(--text3)}
+.modal-cancel:active{background:var(--surface2)}
+.modal-danger{background:none;border:1px solid #c0392b!important;color:#e74c3c}
+.modal-danger:active{background:#2c0b0b}
+
+/* backup buttons in modal */
+.backup-btns{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.backup-btn-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;border:1px solid var(--border2);background:var(--surface);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;transition:all .15s}
+.backup-btn-item:active{background:var(--surface2)}
+.backup-btn-item.connected{border-color:var(--success);color:var(--success)}
+.backup-btn-item .backup-status{margin-left:auto;font-size:11px}
+
+/* ══════════════════════════════════════════════
+   PWA INSTALL BANNER
+══════════════════════════════════════════════ */
+#pwaBanner{display:none;position:fixed;top:16px;left:16px;right:16px;max-width:420px;margin:0 auto;background:#fff;border-radius:14px;padding:12px 14px;z-index:9998;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.pwa-info{display:flex;align-items:center;gap:10px}
+.pwa-icon{width:40px;height:40px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.pwa-title{font-size:14px;font-weight:800;color:#000}
+.pwa-sub{font-size:12px;color:#555}
+.pwa-install{background:#000;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+.pwa-close{background:none;border:none;color:#999;font-size:22px;cursor:pointer;line-height:1;padding:0;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SPLASH SCREEN
+══════════════════════════════════════════ -->
+<div id="splash">
+  <div class="splash-logo">
+    <img src="/icons/bookmarks-for-x-logo.png" style="height:72px;width:auto;object-fit:contain" alt="Bookmarks for X">
+  </div>
+  <p class="splash-slogan" id="splashSlogan">STOP SAVING. START USING.</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MARKETING SLIDES
+══════════════════════════════════════════ -->
+<div id="marketing">
+  <div class="mkt-nav">
+    <button class="mkt-nav-btn" id="mktBack" onclick="prevSlide()">← Back</button>
+    <button class="mkt-nav-btn" onclick="skipToLogin()">Skip →</button>
+  </div>
+
+  <div class="slides" id="slides">
+
+    <!-- SLIDE 1: HERO -->
+    <div class="slide">
+      <div class="slide-logo">
+    <img src="/icons/bookmarks-for-x-logo.png" style="height:44px;width:auto;object-fit:contain" alt="Bookmarks for X">
+  </div>
+      <h1 class="slide-title">Stop Saving.<br>Start Using.</h1>
+      <p class="slide-sub">You built a graveyard of bookmarks you'll never read. We fix that.</p>
+      <div class="pain-list">
+        <div class="pain-item">
+          <span class="pi-icon">😩</span>
+          <div class="pi-text"><strong>500 bookmarks rotting in a list</strong>No way to find what you actually need</div>
+        </div>
+        <div class="pain-item">
+          <span class="pi-icon">🤯</span>
+          <div class="pi-text"><strong>Can't remember why you saved it</strong>Context disappears the moment you close X</div>
+        </div>
+        <div class="pain-item">
+          <span class="pi-icon">🔍</span>
+          <div class="pi-text"><strong>X search is completely useless</strong>Your own bookmarks are unsearchable</div>
+        </div>
+        <div class="pain-item">
+          <span class="pi-icon">💀</span>
+          <div class="pi-text"><strong>Deleted tweets vanish forever</strong>Your research disappears with them</div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">See How It Works →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: AI CHAT DEMO -->
+    <div class="slide">
+      <h1 class="slide-title" style="font-size:26px">Chat With AI.<br>Claude Does the Rest.</h1>
+      <p class="slide-sub">Ask anything. Get real answers from everything you've saved.</p>
+      <div class="chat-demo">
+        <div class="chat-demo-header">
+          <div class="ai-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2L9.5 9H2L8 13.5L5.5 21L12 16.5L18.5 21L16 13.5L22 9H14.5L12 2Z"/></svg>
+            <span style="font-size:13px;font-weight:700">Claude</span>
+          </div>
+          <span class="connected">Connected</span>
+        </div>
+        <div class="chat-demo-body">
+          <div class="chat-bubble-user">"Find everything I saved about fusion energy, organize it, find more sources on X and save a draft article to my Google Drive"</div>
+          <div class="chat-steps">
+            <div class="chat-step">
+              <div class="step-check">✓</div>
+              <div class="step-text"><h5>Searching your bookmarks...</h5><p>Found 32 saved posts about fusion energy</p></div>
+            </div>
+            <div class="chat-step">
+              <div class="step-check">✓</div>
+              <div class="step-text"><h5>Organizing into folder...</h5><p>Created: Energy / Fusion Energy / Future of Fusion</p></div>
+            </div>
+            <div class="chat-step">
+              <div class="step-check">✓</div>
+              <div class="step-text"><h5>Finding more sources on X...</h5><p>Found 18 new high-quality posts and threads</p></div>
+            </div>
+            <div class="chat-step">
+              <div class="step-check">✓</div>
+              <div class="step-text"><h5>Saving to Google Drive...</h5><p>/My Drive/Research/Fusion Energy/Article_Draft.md</p></div>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding:10px;background:#0d2b1a;border-radius:10px;font-size:12px;color:#2ecc71;font-weight:700;display:flex;align-items:center;gap:8px">
+            <span>🏆</span> All done! Your research is complete.
+          </div>
+          <div class="chat-actions">
+            <button class="chat-action-btn">📄 Open Article</button>
+            <button class="chat-action-btn">📁 Open Folder</button>
+            <button class="chat-action-btn">⬇️ Download ZIP</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">See All Features →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: FEATURES -->
+    <div class="slide">
+      <h1 class="slide-title" style="font-size:26px">Finally.<br>Bookmarks that work.</h1>
+      <div class="feat-list">
+        <div class="feat-item">
+          <div class="feat-icon">✦</div>
+          <div class="feat-text"><h4>Chat naturally</h4><p>Ask anything about what you saved. Get real answers, instantly.</p></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🔍</div>
+          <div class="feat-text"><h4>Smart search</h4><p>Search any topic and find every bookmark related to it.</p></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📁</div>
+          <div class="feat-text"><h4>AI organizes</h4><p>Claude creates smart folders that make sense for you.</p></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🌐</div>
+          <div class="feat-text"><h4>Find more on X</h4><p>AI automatically finds and adds more relevant sources.</p></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📝</div>
+          <div class="feat-text"><h4>Write for you</h4><p>Claude writes articles, reports, summaries and research docs.</p></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🗑️</div>
+          <div class="feat-text"><h4>Remove from X directly</h4><p>Clean up X without even opening the app. Finally.</p></div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">See Backups →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: BACKUP -->
+    <div class="slide">
+      <h1 class="slide-title" style="font-size:26px">Back Up<br>Everywhere.</h1>
+      <p class="slide-sub">Your bookmarks. Your data. Always yours.</p>
+      <div class="backup-grid">
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 87.3 78"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#4285f4"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.35A9.06 9.06 0 000 52.8h27.5z" fill="#0066da"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.65z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.9 0H34.4c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="M59.8 52.8H27.5L13.75 76.6c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.4 4.5-1.2z" fill="#2684fc"/><path d="M73.4 26.45l-12.7-22c-1.35-.8-2.9-1.2-4.5-1.2H30.9c-1.6 0-3.15.4-4.5 1.2l12.7 22 13.75 23.8z" fill="#00ac47"/></svg>
+          <span>Google Drive</span>
+        </div>
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          <span>iCloud</span>
+        </div>
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.934zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.887.747-.933z"/></svg>
+          <span>Notion</span>
+        </div>
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#0061FF"/><path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Dropbox</span>
+        </div>
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#0078D4"/><path d="M5 12l3.5-6L12 12l3.5-6L19 12l-3.5 2-4-2-4 2L5 12z" fill="white"/></svg>
+          <span>OneDrive</span>
+        </div>
+        <div class="backup-item">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#D9272E"/><path d="M12 4l8 4-8 4-8-4 8-4zm0 8l8-4v8l-8 4-8-4V8l8 4z" fill="white"/></svg>
+          <span>Mega</span>
+        </div>
+        <div class="backup-item" style="grid-column:span 3;flex-direction:row;justify-content:center;gap:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span style="font-size:12px">Local ZIP / MD / JSON Export</span>
+        </div>
+      </div>
+      <div class="trust-bar">
+        <div class="trust-item">🛡 Your data, your choice</div>
+        <div class="trust-item">🔄 Disconnect anytime</div>
+        <div class="trust-item">🔒 Own your bookmarks forever</div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">Who Is This For? →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: USE CASES -->
+    <div class="slide">
+      <h1 class="slide-title" style="font-size:26px">For Everyone<br>Who Saves on X.</h1>
+      <div class="usecase-grid">
+        <div class="usecase">
+          <h4>🔬 Researchers</h4>
+          <p>Build timelines, find sources, compile documents automatically.</p>
+        </div>
+        <div class="usecase">
+          <h4>💼 Investors</h4>
+          <p>Track market signals, companies and trends across thousands of posts.</p>
+        </div>
+        <div class="usecase">
+          <h4>👩‍💻 Developers</h4>
+          <p>Never lose a library, tool, or code snippet you bookmarked at 2am.</p>
+        </div>
+        <div class="usecase">
+          <h4>✍️ Writers</h4>
+          <p>Turn saved threads into articles, newsletters, and long-form content.</p>
+        </div>
+        <div class="usecase">
+          <h4>📈 Creators</h4>
+          <p>Repurpose saved content into new posts, scripts and ideas instantly.</p>
+        </div>
+        <div class="usecase">
+          <h4>🎓 Students</h4>
+          <p>Organize research by topic, build citations, export to any format.</p>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">See Pricing →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: PRICING -->
+    <div class="slide">
+      <h1 class="slide-title" style="font-size:26px">Simple Pricing.<br>No Surprises.</h1>
+      <p class="slide-sub">No free trial. Pick your plan and start using your bookmarks today.</p>
+      <div class="plan-cards" style="max-width:320px">
+        <div class="plan-card" onclick="selectPlan('byok')">
+          <div class="plan-name">Bring Your Own Key</div>
+          <div class="plan-price">$7.99<sub>/mo</sub></div>
+          <div class="plan-features">
+            <div class="plan-feat on">Full AI chat (your API key)</div>
+            <div class="plan-feat on">Auto-organize all bookmarks</div>
+            <div class="plan-feat on">Remove from X directly</div>
+            <div class="plan-feat on">All 7 cloud backups</div>
+            <div class="plan-feat on">All languages</div>
+          </div>
+        </div>
+        <div class="plan-card featured" onclick="selectPlan('pro')">
+          <div class="plan-badge">Best Value</div>
+          <div class="plan-name">All Inclusive</div>
+          <div class="plan-price">$19.99<sub>/mo</sub></div>
+          <div class="plan-features">
+            <div class="plan-feat on">Everything in Basic</div>
+            <div class="plan-feat on">AI included — no key needed</div>
+            <div class="plan-feat on">500 AI interactions/month</div>
+            <div class="plan-feat on">Weekly AI digest</div>
+            <div class="plan-feat on">Priority support</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="btn btn-white" onclick="nextSlide()">Get Started →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PRICING SCREEN (full)
+══════════════════════════════════════════ -->
+<div id="pricing">
+  <button class="pricing-back" onclick="showMarketing()">← Back</button>
+  <h1 class="pricing-title">Choose Your Plan</h1>
+  <p class="pricing-sub">No free trial. Cancel anytime.</p>
+  <div class="plan-cards">
+
+    <!-- BYOK Plan -->
+    <div class="plan-card" id="planByok">
+      <div class="plan-name">Bring Your Own Key</div>
+      <div class="plan-price">$7.99<sub>/mo</sub></div>
+      <div class="plan-features">
+        <div class="plan-feat on">Full AI chat with your own API key</div>
+        <div class="plan-feat on">Auto-organize all bookmarks</div>
+        <div class="plan-feat on">Remove bookmarks from X directly</div>
+        <div class="plan-feat on">All 7 cloud backup providers</div>
+        <div class="plan-feat on">Local ZIP, MD and JSON export</div>
+        <div class="plan-feat on">All languages supported</div>
+        <div class="plan-feat on">Search X and bookmark new content</div>
+      </div>
+      <div class="plan-agree">
+        <input type="checkbox" id="agreeByok">
+        <label for="agreeByok">I agree to the <a href="#" onclick="showToast('Coming soon')">Privacy Policy</a> and <a href="#" onclick="showToast('Coming soon')">Terms of Service</a></label>
+      </div>
+      <button class="plan-btn plan-btn-outline" onclick="choosePlan('byok')">Get Started — $7.99/mo</button>
+    </div>
+
+    <!-- Pro Plan -->
+    <div class="plan-card featured" id="planPro">
+      <div class="plan-badge">Best Value</div>
+      <div class="plan-name">All Inclusive</div>
+      <div class="plan-price">$19.99<sub>/mo</sub></div>
+      <div class="plan-features">
+        <div class="plan-feat on">Everything in Bring Your Own Key</div>
+        <div class="plan-feat on">Claude AI included — no key needed</div>
+        <div class="plan-feat on">500 AI interactions per month</div>
+        <div class="plan-feat on">Weekly AI digest every Sunday</div>
+        <div class="plan-feat on">Priority support</div>
+        <div class="plan-feat on">iCloud native backup</div>
+      </div>
+      <div class="plan-agree">
+        <input type="checkbox" id="agreePro">
+        <label for="agreePro">I agree to the <a href="#" onclick="showToast('Coming soon')">Privacy Policy</a> and <a href="#" onclick="showToast('Coming soon')">Terms of Service</a></label>
+      </div>
+      <button class="plan-btn plan-btn-white" onclick="choosePlan('pro')">Get Started — $19.99/mo</button>
+    </div>
+
+  </div>
+  <p style="font-size:11px;color:var(--text4);text-align:center;margin-top:16px;max-width:300px;line-height:1.6">
+    We do not train on your data. Your bookmarks are private and encrypted. Cancel anytime.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════ -->
+<div id="login">
+  <div class="login-logo">
+    <img src="/icons/bookmarks-for-x-logo.png" style="height:36px;width:auto;object-fit:contain" alt="Bookmarks for X">
+  </div>
+  <h1 class="login-title">Create Your Account</h1>
+  <p class="login-sub" id="loginSub">Sign in to get started with your bookmarks.</p>
+  <div class="login-btns">
+    <button class="login-btn" onclick="loginWith('google')">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <button class="login-btn" onclick="loginWith('apple')">
+      <svg width="18" height="18" viewBox="0 0 814 1000" fill="white"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.4 0 663 0 541.8c0-207.3 135.3-317.1 269-317.1 69.4 0 126.9 45.8 170.9 45.8 42.2 0 108.2-48.4 190.5-48.4zm-220.3-151.8c31.4-37.4 54.4-89.4 54.4-141.4 0-7.1-.6-14.3-1.9-20.1-51.3 1.9-112.3 34.2-149.1 75.8-28.5 32-55.1 83.9-55.1 136.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 46.2 0 103.7-30.8 136.2-70.2z"/></svg>
+      Continue with Apple
+    </button>
+    <div class="login-divider">— or —</div>
+    <button class="login-btn" onclick="loginWith('email')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      Continue with Email
+    </button>
+  </div>
+  <button class="login-back" onclick="showPricing()">← Back to Plans</button>
+  <p class="login-privacy">By continuing you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>. We do not train on your data.</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BYOK SETUP SCREEN
+══════════════════════════════════════════ -->
+<div id="byok">
+  <button class="byok-back" onclick="showLogin()">← Back</button>
+  <div class="byok-logo">
+    <img src="/icons/bookmarks-for-x-logo.png" style="height:28px;width:auto;object-fit:contain" alt="Bookmarks for X">
+  </div>
+  <h1 class="byok-title">Connect Your Keys</h1>
+  <p class="byok-sub">Keys save instantly as you type. Safe to switch apps anytime.</p>
+
+  <!-- Bearer Token -->
+  <div class="field-group">
+    <div class="field-label">
+      Bearer Token
+      <span class="field-saved" id="savedBearer">✓ saved</span>
+    </div>
+    <input class="inp mono" id="inBearer" type="password" placeholder="AAA..." autocomplete="off" spellcheck="false">
+    <div class="field-hint">
+      <a href="https://developer.x.com" target="_blank">developer.x.com</a> → Your App → Keys and Tokens → Regenerate Bearer Token
+    </div>
+    <div class="field-error" id="errBearer">Bearer Token is required</div>
+  </div>
+
+  <!-- X User ID -->
+  <div class="field-group">
+    <div class="field-label">
+      X User ID (numbers only)
+      <span class="field-saved" id="savedUserId">✓ saved</span>
+    </div>
+    <input class="inp mono" id="inUserId" type="text" placeholder="123456789" autocomplete="off" inputmode="numeric">
+    <div class="field-hint">
+      Not your @handle. Find your numeric ID free at <a href="https://tweeterid.com" target="_blank">tweeterid.com</a>
+    </div>
+    <div class="field-error" id="errUserId">Must be numbers only — not your @handle</div>
+  </div>
+
+  <!-- AI API Key -->
+  <div class="field-group">
+    <div class="field-label">
+      AI API Key
+      <span class="field-saved" id="savedApiKey">✓ saved</span>
+    </div>
+    <input class="inp mono" id="inApiKey" type="password" placeholder="sk-ant-... or sk-..." autocomplete="off" spellcheck="false">
+    <div class="field-hint">
+      Supports Claude (sk-ant-...) or OpenAI (sk-...) &nbsp;·&nbsp;
+      <a href="https://console.anthropic.com" target="_blank">Get Claude key</a> &nbsp;·&nbsp;
+      <a href="https://openrouter.ai" target="_blank">Free key via OpenRouter</a>
+    </div>
+  </div>
+
+  <!-- No train notice -->
+  <div class="no-train">
+    <span>🔒</span>
+    <span>We do not train on your data. Your bookmarks are private and never shared. Keys are stored only on your device.</span>
+  </div>
+
+  <div class="byok-err" id="byokErr">Bearer Token and User ID are required to continue</div>
+  <button class="btn btn-white" onclick="connectByok()" style="max-width:340px">Connect & Open App →</button>
+  <button style="background:none;border:none;color:var(--text4);font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px" onclick="showMarketing()">← Back to start</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOLDER SETUP
+══════════════════════════════════════════ -->
+<div id="folderSetup">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <img src="/icons/bookmarks-for-x-logo.png" style="height:28px;width:auto;object-fit:contain" alt="Bookmarks for X">
+  </div>
+  <h1 style="font-size:22px;font-weight:900;margin-bottom:4px">Set Up Your Folders</h1>
+  <p style="font-size:13px;color:var(--text3);text-align:center;max-width:300px;line-height:1.6;margin-bottom:8px">How would you like to organize your bookmarks?</p>
+
+  <div class="folder-opts">
+    <div class="folder-opt" id="foptAI" onclick="selectFolderOpt('ai')">
+      <div class="folder-opt-icon">✦</div>
+      <div class="folder-opt-text">
+        <h4>Let AI decide</h4>
+        <p>Claude analyzes your bookmarks and creates smart folders automatically. Recommended.</p>
+      </div>
+    </div>
+    <div class="folder-opt" id="foptDefault" onclick="selectFolderOpt('default')">
+      <div class="folder-opt-icon">📁</div>
+      <div class="folder-opt-text">
+        <h4>Use default folders</h4>
+        <p>AI, Code, Research, Tools, Videos, Threads, Other. Simple and clean.</p>
+      </div>
+    </div>
+    <div class="folder-opt" id="foptCustom" onclick="selectFolderOpt('custom')">
+      <div class="folder-opt-icon">✏️</div>
+      <div class="folder-opt-text">
+        <h4>Create my own</h4>
+        <p>Add your own folder names. You're in full control.</p>
+      </div>
+    </div>
+    <div class="folder-opt" id="foptNone" onclick="selectFolderOpt('none')">
+      <div class="folder-opt-icon">☰</div>
+      <div class="folder-opt-text">
+        <h4>No folders — show all flat</h4>
+        <p>Just show all bookmarks in one list. Keep it simple.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folder-confirm" id="folderConfirm">
+    <h4>Your folders</h4>
+    <div class="folder-tags" id="folderTagList"></div>
+    <div class="folder-add-row">
+      <input class="folder-add-inp" id="folderAddInp" placeholder="Add a folder..." maxlength="30">
+      <button class="folder-add-btn" onclick="addCustomFolder()">Add</button>
+    </div>
+  </div>
+
+  <button class="btn btn-white" onclick="confirmFolders()" style="max-width:340px;margin-top:8px">Continue →</button>
+  <button style="background:none;border:none;color:var(--text4);font-size:13px;cursor:pointer;font-family:inherit;margin-top:8px" onclick="skipFolders()">Skip for now</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════ -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="/icons/bookmarks-for-x-logo.png" style="height:20px;width:auto;object-fit:contain" alt="Bookmarks for X">
+      <span class="topbar-title">Bookmarks</span>
+    </div>
+    <div class="topbar-right">
+      <button class="top-btn" onclick="refreshBookmarks()">↻ Sync</button>
+      <div class="user-avatar" id="userAvatar" onclick="showSettings()">R</div>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="tab-content">
+
+    <!-- VAULT TAB -->
+    <div class="tab-pane active" id="vaultPane">
+      <div class="vault-search">
+        <input id="vaultSearch" placeholder="Search your bookmarks..." oninput="renderBookmarks()">
+      </div>
+      <div class="folder-tabs" id="folderTabBar">
+        <!-- rendered by JS -->
+      </div>
+      <div class="vault-status" id="vaultStatus">
+        <span id="statusText">Loading...</span>
+        <span class="bm-counter" id="bmCounter"></span>
+      </div>
+      <div id="bm-list"></div>
+    </div>
+
+    <!-- SEARCH X TAB -->
+    <div class="tab-pane" id="searchPane">
+      <div class="search-area">
+        <input id="xSearchInput" placeholder="Search X for topics to bookmark..." onkeydown="if(event.key==='Enter')searchX()">
+        <button onclick="searchX()">Search</button>
+      </div>
+      <div id="searchResults">
+        <div class="search-empty">
+          <p style="font-size:28px;margin-bottom:12px">🔍</p>
+          <p>Search X to find and bookmark new content.<br>Results appear here.</p>
+          <div class="search-api-notice" style="margin-top:16px">
+            <strong style="color:#fff">Note:</strong> Searching X requires the Basic API tier ($100/mo). If you're on the free tier, you can still browse and manage your existing bookmarks.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT TAB -->
+    <div class="tab-pane" id="chatPane">
+      <div class="chat-header">
+        <div class="chat-ai-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" id="chatAiIcon"><path d="M12 2L9.5 9H2L8 13.5L5.5 21L12 16.5L18.5 21L16 13.5L22 9H14.5L12 2Z"/></svg>
+          <div>
+            <div class="chat-ai-name" id="chatAiName">AI ✨</div>
+            <div class="chat-ai-sub" id="chatAiSub">Ask anything about your bookmarks</div>
+          </div>
+        </div>
+        <div class="chat-counter" id="chatCounter">500 / 500</div>
+      </div>
+      <div class="prompt-suggestions" id="promptSuggestions">
+        <!-- rendered by JS -->
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-welcome">
+          <div class="chat-welcome-logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><path d="M12 2L9.5 9H2L8 13.5L5.5 21L12 16.5L18.5 21L16 13.5L22 9H14.5L12 2Z"/></svg>
+          </div>
+          <h3>What can I help with?</h3>
+          <p>Ask me anything about your saved bookmarks. I can find, organize, summarize, and write for you.</p>
+          <div class="chat-no-train">🔒 We do not train on your data</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-wrap">
+          <textarea id="chatInput" placeholder="Ask anything about your bookmarks..." rows="1" onkeydown="chatKeyDown(event)" oninput="autoResizeInput(this)"></textarea>
+        </div>
+        <button class="chat-send-btn" onclick="sendChat()" id="chatSendBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="navVault" onclick="switchTab('vault')">
+      <svg width="22" height="22" viewBox="0 0 24 30" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 2C3 1.44772 3.44772 1 4 1H20C20.5523 1 21 1.44772 21 2V28L12 22L3 28V2Z"/>
+      </svg>
+      <span>Vault</span>
+    </button>
+    <button class="nav-btn" id="navSearch" onclick="switchTab('search')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <span>Search X</span>
+    </button>
+    <button class="nav-btn" id="navChat" onclick="switchTab('chat')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white" id="navChatIcon">
+        <path d="M12 2L9.5 9H2L8 13.5L5.5 21L12 16.5L18.5 21L16 13.5L22 9H14.5L12 2Z"/>
+      </svg>
+      <span id="navChatLabel">AI ✨</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SETTINGS SCREEN
+══════════════════════════════════════════ -->
+<div id="settings">
+  <div class="settings-header">
+    <button class="settings-back" onclick="hideSettings()">←</button>
+    <span class="settings-title">Settings</span>
+  </div>
+  <div class="settings-body">
+
+    <!-- Account -->
+    <div class="settings-section">
+      <div class="settings-section-title">Account</div>
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <div class="settings-item-label" id="settingsName">Your Account</div>
+          <div class="settings-item-sub" id="settingsEmail">Not signed in</div>
+        </div>
+        <button onclick="signOut()" style="background:none;border:1px solid var(--border2);color:var(--text3);border-radius:10px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Plan -->
+    <div class="settings-section">
+      <div class="settings-section-title">Plan</div>
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <div class="settings-item-label">Current Plan</div>
+          <div class="settings-item-sub" id="settingsPlan">Loading...</div>
+        </div>
+        <div class="settings-item-right">
+          <span class="settings-badge pro" id="settingsPlanBadge">Pro</span>
+          <span class="settings-chevron">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Keys -->
+    <div class="settings-section">
+      <div class="settings-section-title">API Keys</div>
+      <div class="settings-item" onclick="showKeysModal()">
+        <div class="settings-item-left">
+          <div class="settings-item-label">Bearer Token</div>
+          <div class="settings-item-sub" id="settingsBearerStatus">Not set</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+      <div class="settings-item" onclick="showKeysModal()">
+        <div class="settings-item-left">
+          <div class="settings-item-label">AI API Key</div>
+          <div class="settings-item-sub" id="settingsApiStatus">Not set</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+    </div>
+
+    <!-- Backup -->
+    <div class="settings-section">
+      <div class="settings-section-title">Backup & Export</div>
+      <div class="settings-item" onclick="showBackupModal()">
+        <div class="settings-item-left">
+          <div class="settings-item-label">Cloud Backup</div>
+          <div class="settings-item-sub" id="settingsBackupStatus">No services connected</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+      <div class="settings-item" onclick="exportAll()">
+        <div class="settings-item-left">
+          <div class="settings-item-label">Export All Bookmarks</div>
+          <div class="settings-item-sub">Download as ZIP with MD + JSON</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+    </div>
+
+    <!-- Folders -->
+    <div class="settings-section">
+      <div class="settings-section-title">Folders</div>
+      <div class="settings-item" onclick="showFolderManager()">
+        <div class="settings-item-left">
+          <div class="settings-item-label">Manage Folders</div>
+          <div class="settings-item-sub" id="settingsFolderCount">0 folders</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="settings-section">
+      <div class="settings-section-title">Feedback</div>
+      <div class="settings-item" onclick="sendFeedback('bug')">
+        <div class="settings-item-left"><div class="settings-item-label">Report a Bug</div></div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+      <div class="settings-item" onclick="sendFeedback('feature')">
+        <div class="settings-item-left"><div class="settings-item-label">Request a Feature</div></div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+      <div class="settings-item" onclick="sendFeedback('feedback')">
+        <div class="settings-item-left"><div class="settings-item-label">Give Feedback</div></div>
+        <div class="settings-item-right"><span class="settings-chevron">›</span></div>
+      </div>
+    </div>
+
+    <!-- Danger -->
+    <div class="settings-section">
+      <div class="settings-section-title">Danger Zone</div>
+      <div class="settings-item" onclick="wipeAll()">
+        <div class="settings-item-left">
+          <div class="settings-item-label" style="color:#e74c3c">Wipe All Data</div>
+          <div class="settings-item-sub">Removes all keys and bookmarks from this device</div>
+        </div>
+        <div class="settings-item-right"><span class="settings-chevron" style="color:#e74c3c">›</span></div>
+      </div>
+    </div>
+
+    <div class="settings-footer">
+      <p>BOOKMARKS FOR X<br>EPIPHANY APPS — ALL RIGHTS RESERVED</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOLDER MANAGER OVERLAY
+══════════════════════════════════════════ -->
+<div id="folderManager">
+  <div class="fm-header">
+    <span class="fm-title">Folders</span>
+    <button class="fm-close" onclick="hideFolderManager()">×</button>
+  </div>
+  <div class="fm-list" id="fmList"></div>
+  <div class="fm-add">
+    <input id="fmAddInput" placeholder="New folder name..." maxlength="30" onkeydown="if(event.key==='Enter')addFolder()">
+    <button onclick="addFolder()">Add</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL OVERLAY
+══════════════════════════════════════════ -->
+<div id="modalOverlay">
+  <div class="modal-sheet" id="modalSheet">
+    <!-- content injected by JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PWA INSTALL BANNER
+══════════════════════════════════════════ -->
+<div id="pwaBanner">
+  <div class="pwa-info">
+    <div class="pwa-icon">
+      <img src="/icons/bookmarks-for-x-logo.png" style="width:22px;height:22px;object-fit:contain" alt="Bookmarks for X">
+    </div>
+    <div>
+      <div class="pwa-title">Bookmarks for X</div>
+      <div class="pwa-sub" id="pwaSub">Install for the best experience</div>
+    </div>
+  </div>
+  <button class="pwa-install" id="pwaInstallBtn">Install</button>
+  <button class="pwa-close" id="pwaCloseBtn">×</button>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+/*
+ * BOOKMARKS FOR X
+ * Epiphany Apps — All Rights Reserved
+ * Stop Saving. Start Using.
+ */
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+var STATE = {
+  bookmarks: [],
+  folders: ['All','AI','Code','Research','Tools','Videos','Threads','Other'],
+  activeFolder: 'All',
+  activeTab: 'vault',
+  plan: null, // 'byok' | 'pro'
+  user: null,
+  chatHistory: [],
+  chatInteractions: 0,
+  maxInteractions: 500,
+  savedSearchIds: {},
+  deferredPrompt: null,
+  folderOpt: 'ai',
+  ratingActions: 0
+};
+
+// ══════════════════════════════════════════════
+// STORAGE HELPERS
+// ══════════════════════════════════════════════
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function del(k){try{localStorage.removeItem(k)}catch(e){}}
+
+function getJSON(k,def){
+  try{var v=localStorage.getItem(k);return v?JSON.parse(v):def}
+  catch(e){return def}
+}
+function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},2400);
+}
+
+// ══════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ══════════════════════════════════════════════
+var SCREENS=['splash','marketing','pricing','login','byok','folderSetup','app','settings'];
+
+function showOnly(id){
+  SCREENS.forEach(function(s){
+    var el=document.getElementById(s);
+    if(!el)return;
+    el.style.display=(s===id)?'flex':'none';
+  });
+}
+
+function showMarketing(){showOnly('marketing');renderDots()}
+function showPricing(){showOnly('pricing')}
+function showLogin(){showOnly('login')}
+function showByok(){showOnly('byok')}
+function showFolderSetup(){showOnly('folderSetup')}
+function showApp(){
+  showOnly('app');
+  updateChatLabel();
+  updateUserAvatar();
+  updateSettingsStatus();
+  renderFolderTabs();
+}
+function showSettings(){
+  document.getElementById('settings').style.display='flex';
+  updateSettingsStatus();
+}
+function hideSettings(){document.getElementById('settings').style.display='none'}
+
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
+window.onload = function(){
+  initState();
+  renderDots();
+  renderPromptSuggestions();
+  wireByokInputs();
+  wirePWA();
+  wireChat();
+  wireModal();
+
+  // Splash
+  setTimeout(function(){
+    document.getElementById('splashSlogan').classList.add('show');
+  }, 1500);
+
+  setTimeout(function(){
+    var sp=document.getElementById('splash');
+    sp.classList.add('fade');
+    setTimeout(function(){
+      sp.style.display='none';
+      boot();
+    }, 800);
+  }, 3200);
+};
+
+function initState(){
+  STATE.plan = get('plan');
+  STATE.bookmarks = getJSON('bm',[]);
+  STATE.folders = getJSON('folders',['All','AI','Code','Research','Tools','Videos','Threads','Other']);
+  STATE.chatHistory = getJSON('chatHistory',[]);
+  STATE.chatInteractions = parseInt(get('chatInteractions')||'0');
+  STATE.user = getJSON('user',null);
+}
+
+function boot(){
+  var bearer=get('b');
+  var userId=get('u');
+  if(bearer && userId){
+    showApp();
+    loadBookmarks();
+  } else {
+    showMarketing();
+  }
+}
+
+// ══════════════════════════════════════════════
+// MARKETING SLIDES
+// ══════════════════════════════════════════════
+var currentSlide=0;
+var TOTAL_SLIDES=6;
+
+function renderDots(){
+  var el=document.getElementById('dots');
+  if(!el)return;
+  var h='';
+  for(var i=0;i<TOTAL_SLIDES;i++){
+    h+='<div class="dot'+(i===currentSlide?' on':'')+'"></div>';
+  }
+  el.innerHTML=h;
+  var back=document.getElementById('mktBack');
+  if(back)back.style.visibility=currentSlide===0?'hidden':'visible';
+}
+
+function goToSlide(n){
+  currentSlide=Math.max(0,Math.min(TOTAL_SLIDES-1,n));
+  var el=document.getElementById('slides');
+  if(el)el.style.transform='translateX(-'+(currentSlide*100)+'vw)';
+  renderDots();
+}
+
+function nextSlide(){
+  if(currentSlide<TOTAL_SLIDES-1){goToSlide(currentSlide+1)}
+  else{showPricing()}
+}
+
+function prevSlide(){
+  if(currentSlide>0)goToSlide(currentSlide-1);
+}
+
+function skipToLogin(){showPricing()}
+
+function selectPlan(p){
+  set('plan',p);
+  STATE.plan=p;
+  showPricing();
+}
+
+// ══════════════════════════════════════════════
+// PRICING
+// ══════════════════════════════════════════════
+function choosePlan(plan){
+  var agreeId = plan==='byok'?'agreeByok':'agreePro';
+  var cb = document.getElementById(agreeId);
+  if(!cb||!cb.checked){
+    showToast('Please agree to the Privacy Policy and Terms first');
+    return;
+  }
+  set('plan',plan);
+  STATE.plan=plan;
+  showLogin();
+  var sub=document.getElementById('loginSub');
+  if(sub)sub.textContent=plan==='byok'?
+    'Sign in to connect your AI API key and get started.' :
+    'Sign in to activate your All Inclusive plan.';
+}
+
+// ══════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════
+function loginWith(provider){
+  // Stub — real auth via Supabase in Phase 2
+  var user = {
+    provider: provider,
+    name: provider==='google'?'Google User':provider==='apple'?'Apple User':'User',
+    email: provider+'@example.com',
+    avatar: null,
+    initial: provider==='google'?'G':provider==='apple'?'A':'U'
+  };
+  setJSON('user',user);
+  STATE.user=user;
+  updateUserAvatar();
+
+  if(STATE.plan==='byok'){
+    showByok();
+  } else {
+    // Pro plan — check if folders set up
+    var foldersSet=get('foldersConfigured');
+    if(!foldersSet){
+      showFolderSetup();
+    } else {
+      showApp();
+      loadBookmarks();
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// USER AVATAR
+// ══════════════════════════════════════════════
+function updateUserAvatar(){
+  var av=document.getElementById('userAvatar');
+  if(!av)return;
+  var user=STATE.user||getJSON('user',null);
+  if(user){
+    if(user.avatar){
+      av.innerHTML='<img src="'+esc(user.avatar)+'" alt="avatar">';
+    } else {
+      av.textContent=(user.initial||user.name||'U').charAt(0).toUpperCase();
+      av.style.background='#1a1a1a';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// BYOK SETUP
+// ══════════════════════════════════════════════
+function wireByokInputs(){
+  var inB=document.getElementById('inBearer');
+  var inU=document.getElementById('inUserId');
+  var inA=document.getElementById('inApiKey');
+
+  // Pre-fill saved values
+  var b=get('b'),u=get('u'),c=get('c');
+  if(b&&inB){inB.value=b;showSaved('savedBearer')}
+  if(u&&inU){inU.value=u;showSaved('savedUserId')}
+  if(c&&inA){inA.value=c;showSaved('savedApiKey')}
+
+  // Save on every keystroke
+  if(inB)inB.addEventListener('input',function(){
+    var v=this.value.trim();
+    if(v){set('b',v);showSaved('savedBearer')}
+  });
+  if(inU)inU.addEventListener('input',function(){
+    var v=this.value.trim();
+    // Clear non-numeric
+    this.value=v.replace(/[^0-9]/g,'');
+    v=this.value;
+    if(v){
+      if(!/^[0-9]+$/.test(v)){
+        document.getElementById('errUserId').style.display='block';
+      } else {
+        document.getElementById('errUserId').style.display='none';
+        set('u',v);
+        showSaved('savedUserId');
+      }
+    }
+  });
+  if(inA)inA.addEventListener('input',function(){
+    var v=this.value.trim();
+    if(v){set('c',v);showSaved('savedApiKey')}
+  });
+}
+
+function showSaved(id){
+  var el=document.getElementById(id);
+  if(el)el.style.display='inline';
+}
+
+function connectByok(){
+  var b=get('b');
+  var u=get('u');
+  var err=document.getElementById('byokErr');
+  if(!b||!u){
+    if(err)err.style.display='block';
+    return;
+  }
+  if(err)err.style.display='none';
+  var foldersSet=get('foldersConfigured');
+  if(!foldersSet){
+    showFolderSetup();
+  } else {
+    showApp();
+    loadBookmarks();
+  }
+}
+
+// ══════════════════════════════════════════════
+// FOLDER SETUP
+// ══════════════════════════════════════════════
+var selectedFolderOpt='ai';
+var customFolders=['AI','Code','Research','Tools','Videos','Threads','Other'];
+
+function selectFolderOpt(opt){
+  selectedFolderOpt=opt;
+  ['ai','default','custom','none'].forEach(function(o){
+    var el=document.getElementById('fopt'+o.charAt(0).toUpperCase()+o.slice(1));
+    if(el)el.classList.toggle('sel',o===opt);
+  });
+
+  var confirm=document.getElementById('folderConfirm');
+  if(opt==='custom'||opt==='default'){
+    confirm.style.display='flex';
+    if(opt==='default'){
+      customFolders=['AI','Code','Research','Tools','Videos','Threads','Other'];
+    }
+    renderFolderTags();
+  } else {
+    confirm.style.display='none';
+  }
+}
+
+function renderFolderTags(){
+  var el=document.getElementById('folderTagList');
+  if(!el)return;
+  el.innerHTML=customFolders.map(function(f,i){
+    return '<div class="folder-tag">'+esc(f)+'<button class="folder-tag-x" onclick="removeCustomFolder('+i+')">×</button></div>';
+  }).join('');
+}
+
+function removeCustomFolder(i){
+  customFolders.splice(i,1);
+  renderFolderTags();
+}
+
+function addCustomFolder(){
+  var inp=document.getElementById('folderAddInp');
+  var v=(inp.value||'').trim();
+  if(!v)return;
+  if(customFolders.indexOf(v)===-1)customFolders.push(v);
+  inp.value='';
+  renderFolderTags();
+}
+
+function confirmFolders(){
+  var folders=['All'];
+  if(selectedFolderOpt==='ai'){
+    // AI will decide after loading bookmarks
+    set('autoOrg','1');
+    folders=['All','AI','Code','Research','Tools','Videos','Threads','Other'];
+  } else if(selectedFolderOpt==='default'){
+    folders=['All'].concat(customFolders);
+  } else if(selectedFolderOpt==='custom'){
+    folders=['All'].concat(customFolders);
+  } else {
+    folders=['All'];
+  }
+  STATE.folders=folders;
+  setJSON('folders',folders);
+  set('foldersConfigured','1');
+  showApp();
+  loadBookmarks();
+}
+
+function skipFolders(){
+  set('foldersConfigured','1');
+  showApp();
+  loadBookmarks();
+}
+
+// ══════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════
+function switchTab(tab){
+  STATE.activeTab=tab;
+  var panes={vault:'vaultPane',search:'searchPane',chat:'chatPane'};
+  var navs={vault:'navVault',search:'navSearch',chat:'navChat'};
+  Object.keys(panes).forEach(function(t){
+    var p=document.getElementById(panes[t]);
+    var n=document.getElementById(navs[t]);
+    if(p)p.classList.toggle('active',t===tab);
+    if(n)n.classList.toggle('active',t===tab);
+  });
+}
+
+// ══════════════════════════════════════════════
+// CHAT LABEL (paid vs BYOK)
+// ══════════════════════════════════════════════
+function updateChatLabel(){
+  var plan=STATE.plan||get('plan');
+  var isPro=plan==='pro';
+  var name=document.getElementById('chatAiName');
+  var sub=document.getElementById('chatAiSub');
+  var navLabel=document.getElementById('navChatLabel');
+  var counter=document.getElementById('chatCounter');
+
+  if(isPro){
+    if(name)name.textContent='Claude ✨';
+    if(navLabel)navLabel.textContent='Claude ✨';
+    if(sub)sub.textContent='Ask anything about your bookmarks';
+  } else {
+    if(name)name.textContent='AI ✨';
+    if(navLabel)navLabel.textContent='AI ✨';
+    if(sub)sub.textContent='Using your API key';
+  }
+
+  var remaining=STATE.maxInteractions-STATE.chatInteractions;
+  if(counter){
+    counter.textContent=remaining+' / '+STATE.maxInteractions;
+    counter.className='chat-counter'+(remaining<50?' danger':remaining<150?' warn':'');
+  }
+}
+
+// ══════════════════════════════════════════════
+// PROMPT SUGGESTIONS
+// ══════════════════════════════════════════════
+var PROMPTS=[
+  'What should I build this weekend?',
+  'Summarize my AI bookmarks',
+  'Find everything about crypto',
+  'What tools have I saved?',
+  'Write an article from my research',
+  'Find more sources on my top topic',
+  'What threads should I read first?',
+  'Organize my bookmarks into folders',
+  'What did I save about startups?',
+  'Find the most useful code resources'
+];
+
+function renderPromptSuggestions(){
+  var el=document.getElementById('promptSuggestions');
+  if(!el)return;
+  el.innerHTML=PROMPTS.map(function(p){
+    return '<button class="prompt-chip" onclick="usePrompt(\''+esc(p)+'\')">'+ esc(p) +'</button>';
+  }).join('');
+}
+
+function usePrompt(p){
+  var inp=document.getElementById('chatInput');
+  if(inp){inp.value=p;autoResizeInput(inp)}
+  sendChat();
+}
+
+// ══════════════════════════════════════════════
+// CLASSIFY
+// ══════════════════════════════════════════════
+function classify(text){
+  var t=(text||'').toLowerCase();
+  if(/agent|memory|rag|llm|gpt|claude|embedding|vector|langchain|mcp|prompt|\bai\b|machine.?learn|neural|deep.?learn/.test(t))return'AI';
+  if(/github|npm|repo|clone|fork|code|function|api|sdk|library|framework|javascript|python|rust|typescript/.test(t))return'Code';
+  if(/paper|arxiv|research|study|benchmark|findings|analysis|survey|journal|citation/.test(t))return'Research';
+  if(/app|tool|product|launch|saas|platform|service|analytics|software|startup/.test(t))return'Tools';
+  if(/youtu|vimeo|video|watch|stream|clip|shorts/.test(t))return'Videos';
+  if(/thread|🧵|1\/|a thread|long thread/.test(t))return'Threads';
+  return'Other';
+}
+
+function isThread(text){return /thread|🧵|1\/[0-9]/.test((text||'').toLowerCase())}
+function isVideo(text,link){return /youtu|vimeo|video/.test((text+' '+(link||'')).toLowerCase())}
+
+// ══════════════════════════════════════════════
+// LOAD BOOKMARKS FROM X API
+// ══════════════════════════════════════════════
+async function loadBookmarks(){
+  var bearer=get('b');
+  var userId=get('u');
+  if(!bearer||!userId){return}
+
+  updateStatus('Syncing...',null);
+  document.getElementById('bm-list').innerHTML='<div class="bm-empty">Fetching your bookmarks from X...</div>';
+
+  try{
+    var url='https://api.twitter.com/2/users/'+userId+'/bookmarks?max_results=100&tweet.fields=created_at,entities,text,author_id&expansions=author_id&user.fields=name,username,profile_image_url';
+    var res=await fetch(url,{headers:{'Authorization':'Bearer '+bearer}});
+
+    if(!res.ok){
+      var err=await res.json();
+      throw new Error(err.detail||err.title||'API error '+res.status);
+    }
+
+    var data=await res.json();
+    var tweets=data.data||[];
+    var users={};
+    ((data.includes||{}).users||[]).forEach(function(u){users[u.id]=u});
+
+    STATE.bookmarks=tweets.map(function(t){
+      var u=users[t.author_id]||{};
+      var urls=((t.entities||{}).urls||[]);
+      var link=urls.length?(urls[urls.length-1].expanded_url||urls[0].url):'';
+      var cat=classify(t.text);
+      return{
+        id:t.id,
+        name:u.name||'Unknown',
+        handle:u.username||'',
+        avatar:u.profile_image_url||null,
+        date:t.created_at?new Date(t.created_at).toLocaleDateString():'',
+        text:t.text||'',
+        link:link,
+        cat:cat,
+        isThread:isThread(t.text),
+        isVideo:isVideo(t.text,link)
+      };
+    });
+
+    setJSON('bm',STATE.bookmarks);
+
+    // Import X folders if they exist
+    importXFolders(data);
+
+    var total=STATE.bookmarks.length;
+    updateStatus(total+' bookmarks',total);
+    renderBookmarks();
+    renderFolderTabs();
+
+    // Auto-org if enabled
+    if(get('autoOrg')&&STATE.bookmarks.length>0){
+      autoOrganize();
+    }
+
+  }catch(e){
+    var cached=getJSON('bm',[]);
+    if(cached.length){
+      STATE.bookmarks=cached;
+      updateStatus('Cached · '+esc(e.message),cached.length);
+      renderBookmarks();
+      renderFolderTabs();
+    } else {
+      updateStatus(esc(e.message),0);
+      document.getElementById('bm-list').innerHTML='<div class="bm-empty">Could not load bookmarks.<br>'+esc(e.message)+'</div>';
+    }
+  }
+}
+
+function refreshBookmarks(){
+  loadBookmarks();
+}
+
+function importXFolders(data){
+  // X native bookmark folders — import if present
+  if(data.meta&&data.meta.bookmark_folders){
+    var xFolders=data.meta.bookmark_folders.map(function(f){return f.name});
+    var existing=STATE.folders.filter(function(f){return f!=='All'});
+    var newFolders=xFolders.filter(function(f){return existing.indexOf(f)===-1});
+    if(newFolders.length){
+      STATE.folders=STATE.folders.concat(newFolders);
+      setJSON('folders',STATE.folders);
+      showToast('Imported '+newFolders.length+' folders from X');
+      renderFolderTabs();
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// STATUS & COUNTER
+// ══════════════════════════════════════════════
+function updateStatus(msg,count){
+  var st=document.getElementById('statusText');
+  var ct=document.getElementById('bmCounter');
+  if(st)st.textContent=msg;
+  if(ct&&count!==null){
+    var pct=count/1000;
+    ct.textContent=count+' / 1000';
+    ct.className='bm-counter'+(pct>=0.98?' danger':pct>=0.90?' warn':'');
+    if(pct>=0.98)showToast('⚠️ Almost at X limit! Remove some bookmarks.');
+    else if(pct>=0.90)showToast('Approaching X bookmark limit ('+count+'/1000)');
+  }
+}
+
+// ══════════════════════════════════════════════
+// RENDER BOOKMARKS
+// ══════════════════════════════════════════════
+function renderBookmarks(){
+  var q=(document.getElementById('vaultSearch').value||'').toLowerCase();
+  var folder=STATE.activeFolder;
+
+  var filtered=STATE.bookmarks.filter(function(b){
+    if(folder!=='All'&&b.cat!==folder)return false;
+    if(q){
+      var hay=(b.text+' '+b.name+' @'+b.handle+' '+(b.link||'')).toLowerCase();
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+
+  var el=document.getElementById('bm-list');
+  if(!filtered.length){
+    el.innerHTML='<div class="bm-empty">'+(STATE.bookmarks.length?'No results for that search':'No bookmarks yet — tap ↻ Sync to load')+'</div>';
+    return;
+  }
+
+  el.innerHTML=filtered.map(function(b){
+    var id=esc(b.id);
+    var link=b.link?(b.link.length>52?b.link.slice(0,52)+'…':b.link):'';
+    var badges='<span class="bm-badge">'+esc(b.cat)+'</span>';
+    if(b.isThread)badges+='<span class="bm-badge thread">Thread</span>';
+    if(b.isVideo)badges+='<span class="bm-badge video">Video</span>';
+    return '<div class="bm-card">'+
+      '<div class="bm-card-top">'+
+        '<div class="bm-author"><div class="bm-name">'+esc(b.name)+'</div><div class="bm-handle">@'+esc(b.handle)+'</div></div>'+
+        '<div class="bm-date">'+esc(b.date)+'</div>'+
+      '</div>'+
+      '<div class="bm-text">'+esc(b.text)+'</div>'+
+      (b.link?'<a class="bm-link" href="'+esc(b.link)+'" target="_blank" rel="noopener">'+esc(link)+'</a>':'')+
+      '<div class="bm-badges">'+badges+'</div>'+
+      '<div class="bm-actions">'+
+        '<button class="bm-action danger" onclick="removeBookmark(\''+id+'\')">Remove from X</button>'+
+        '<button class="bm-action" onclick="saveIdea(\''+id+'\')">Save .txt</button>'+
+        '<button class="bm-action" onclick="exportMd(\''+id+'\')">Export .md</button>'+
+        (b.link?'<a class="bm-action" href="'+esc(b.link)+'" target="_blank" rel="noopener" style="text-decoration:none">Source →</a>':'')+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// FOLDER TABS
+// ══════════════════════════════════════════════
+function renderFolderTabs(){
+  var el=document.getElementById('folderTabBar');
+  if(!el)return;
+  var counts={};
+  STATE.bookmarks.forEach(function(b){
+    counts[b.cat]=(counts[b.cat]||0)+1;
+  });
+
+  var html=STATE.folders.map(function(f){
+    var cnt=f==='All'?STATE.bookmarks.length:(counts[f]||0);
+    var active=f===STATE.activeFolder;
+    return '<button class="folder-tab'+(active?' active':'')+'" onclick="setFolder(\''+esc(f)+'\')">'+
+      esc(f)+(cnt?' ('+cnt+')':'')+
+    '</button>';
+  }).join('');
+  html+='<button class="folder-mgr-btn" onclick="showFolderManager()" title="Manage folders">···</button>';
+  el.innerHTML=html;
+}
+
+function setFolder(f){
+  STATE.activeFolder=f;
+  renderFolderTabs();
+  renderBookmarks();
+}
+
+// ══════════════════════════════════════════════
+// REMOVE BOOKMARK
+// ══════════════════════════════════════════════
+async function removeBookmark(id){
+  var bearer=get('b');
+  var userId=get('u');
+  try{
+    var res=await fetch('https://api.twitter.com/2/users/'+userId+'/bookmarks/'+id,{
+      method:'DELETE',
+      headers:{'Authorization':'Bearer '+bearer}
+    });
+    showToast(res.ok?'Removed from X ✓':'Removed locally');
+  }catch(e){showToast('Removed locally')}
+  STATE.bookmarks=STATE.bookmarks.filter(function(b){return b.id!==id});
+  setJSON('bm',STATE.bookmarks);
+  updateStatus(STATE.bookmarks.length+' bookmarks',STATE.bookmarks.length);
+  renderBookmarks();
+  renderFolderTabs();
+  trackPositiveAction();
+}
+
+// ══════════════════════════════════════════════
+// SAVE / EXPORT
+// ══════════════════════════════════════════════
+function saveIdea(id){
+  var b=STATE.bookmarks.find(function(x){return x.id===id});
+  if(!b)return;
+  var txt='Bookmarks for X — Saved Idea\n'+'─'.repeat(40)+'\n\n';
+  txt+='@'+b.handle+' ['+b.cat+'] — '+b.date+'\n\n';
+  txt+=b.text+(b.link?'\n\n'+b.link:'')+'\n';
+  download(txt,'xbm-'+b.id.slice(-6)+'.txt','text/plain');
+  showToast('Saved!');
+  trackPositiveAction();
+}
+
+function exportMd(id){
+  var b=STATE.bookmarks.find(function(x){return x.id===id});
+  if(!b)return;
+  var md='# '+esc(b.name)+'\n\n';
+  md+='> **@'+b.handle+'** · '+b.date+' · `'+b.cat+'`\n\n';
+  md+=b.text+'\n\n';
+  if(b.link)md+='[Source]('+b.link+')\n';
+  download(md,'xbm-'+b.id.slice(-6)+'.md','text/markdown');
+  showToast('Exported!');
+}
+
+function exportAll(){
+  if(!STATE.bookmarks.length){showToast('No bookmarks to export');return}
+  var md='# Bookmarks for X — Full Export\n\n';
+  md+='Total: '+STATE.bookmarks.length+' bookmarks\n\n---\n\n';
+  STATE.bookmarks.forEach(function(b,i){
+    md+='## '+(i+1)+'. '+b.name+'\n\n';
+    md+='**@'+b.handle+'** · '+b.date+' · `'+b.cat+'`\n\n';
+    md+=b.text+'\n\n';
+    if(b.link)md+='[Source]('+b.link+')\n\n';
+    md+='---\n\n';
+  });
+  var json=JSON.stringify(STATE.bookmarks,null,2);
+  // Combine as zip-like (single md with json appended)
+  var full=md+'\n\n<!-- JSON DATA\n'+json+'\n-->';
+  download(full,'bookmarks-for-x-export.md','text/markdown');
+  showToast('Export downloaded!');
+}
+
+function download(content,filename,type){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type:type}));
+  a.download=filename;
+  a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+}
+
+// ══════════════════════════════════════════════
+// AUTO ORGANIZE
+// ══════════════════════════════════════════════
+function autoOrganize(){
+  // Re-classify all bookmarks
+  STATE.bookmarks=STATE.bookmarks.map(function(b){
+    b.cat=classify(b.text);
+    b.isThread=isThread(b.text);
+    b.isVideo=isVideo(b.text,b.link);
+    return b;
+  });
+  setJSON('bm',STATE.bookmarks);
+  renderBookmarks();
+  renderFolderTabs();
+  showToast('AI organized your bookmarks ✦');
+}
+
+// ══════════════════════════════════════════════
+// SEARCH X TAB
+// ══════════════════════════════════════════════
+async function searchX(){
+  var q=(document.getElementById('xSearchInput').value||'').trim();
+  if(!q)return;
+  var bearer=get('b');
+  var el=document.getElementById('searchResults');
+  el.innerHTML='<div class="search-empty">Searching X for "'+esc(q)+'"...</div>';
+
+  try{
+    var url='https://api.twitter.com/2/tweets/search/recent?query='+encodeURIComponent(q)+'&max_results=20&tweet.fields=author_id,created_at,text&expansions=author_id&user.fields=name,username';
+    var res=await fetch(url,{headers:{'Authorization':'Bearer '+bearer}});
+    if(!res.ok){
+      var err=await res.json();
+      if(res.status===403||res.status===401){
+        el.innerHTML='<div class="search-api-notice"><strong style="color:#fff">Basic API Required</strong><br><br>Searching X requires the Basic API tier ($100/mo from developer.x.com).<br><br>You can still manage and chat with your existing bookmarks.</div>';
+        return;
+      }
+      throw new Error(err.detail||err.title||'Error '+res.status);
+    }
+    var data=await res.json();
+    var tweets=data.data||[];
+    var users={};
+    ((data.includes||{}).users||[]).forEach(function(u){users[u.id]=u});
+
+    if(!tweets.length){
+      el.innerHTML='<div class="search-empty">No results for "'+esc(q)+'"</div>';
+      return;
+    }
+
+    el.innerHTML=tweets.map(function(t){
+      var u=users[t.author_id]||{};
+      var saved=STATE.savedSearchIds[t.id];
+      return '<div class="search-card">'+
+        '<div class="search-card-top">'+
+          '<div><div class="search-card-author">'+esc(u.name||'Unknown')+'</div><div class="search-card-handle">@'+esc(u.username||'')+'</div></div>'+
+        '</div>'+
+        '<div class="search-card-text">'+esc(t.text)+'</div>'+
+        '<button class="search-bm-btn'+(saved?' saved':'')+'" id="sbtn-'+esc(t.id)+'" onclick="bookmarkFromSearch(\''+esc(t.id)+'\',\''+esc(JSON.stringify(t).replace(/'/g,''))+'\',\''+esc(JSON.stringify(u).replace(/'/g,''))+'\')">'+(saved?'✓ Saved':'+ Bookmark')+'</button>'+
+      '</div>';
+    }).join('');
+  }catch(e){
+    el.innerHTML='<div class="search-empty">Error: '+esc(e.message)+'</div>';
+  }
+}
+
+async function bookmarkFromSearch(tweetId,tweetJson,userJson){
+  var bearer=get('b');
+  var userId=get('u');
+  var btn=document.getElementById('sbtn-'+tweetId);
+  if(btn){btn.textContent='Saving...';btn.disabled=true}
+
+  try{
+    var res=await fetch('https://api.twitter.com/2/users/'+userId+'/bookmarks',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+bearer,'Content-Type':'application/json'},
+      body:JSON.stringify({tweet_id:tweetId})
+    });
+
+    var t=JSON.parse(decodeURIComponent(tweetJson));
+    var u=JSON.parse(decodeURIComponent(userJson));
+    var bm={
+      id:tweetId,
+      name:u.name||'Unknown',
+      handle:u.username||'',
+      date:new Date().toLocaleDateString(),
+      text:t.text||'',
+      link:'',
+      cat:classify(t.text),
+      isThread:isThread(t.text),
+      isVideo:false
+    };
+    STATE.bookmarks.unshift(bm);
+    setJSON('bm',STATE.bookmarks);
+    STATE.savedSearchIds[tweetId]=true;
+    if(btn){btn.textContent='✓ Saved';btn.className='search-bm-btn saved'}
+    showToast('Bookmarked!');
+    updateStatus(STATE.bookmarks.length+' bookmarks',STATE.bookmarks.length);
+    renderFolderTabs();
+    trackPositiveAction();
+  }catch(e){
+    if(btn){btn.textContent='+ Bookmark';btn.disabled=false}
+    showToast('Error: '+e.message);
+  }
+}
+
+// ══════════════════════════════════════════════
+// AI CHAT
+// ══════════════════════════════════════════════
+function wireChat(){
+  var inp=document.getElementById('chatInput');
+  if(inp){
+    inp.addEventListener('input',function(){autoResizeInput(this)});
+  }
+}
+
+function wireModal(){
+  var overlay=document.getElementById('modalOverlay');
+  if(overlay){
+    overlay.addEventListener('click',function(e){
+      if(e.target===overlay)closeModal();
+    });
+  }
+}
+
+function chatKeyDown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}
+}
+
+function autoResizeInput(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+}
+
+async function sendChat(){
+  var inp=document.getElementById('chatInput');
+  var q=(inp.value||'').trim();
+  if(!q)return;
+
+  var plan=STATE.plan||get('plan');
+  var key=get('c');
+
+  if(plan!=='pro'&&!key){
+    addAiMessage('No AI key found. Tap Settings to add your API key, or upgrade to the All Inclusive plan.');
+    return;
+  }
+
+  if(STATE.chatInteractions>=STATE.maxInteractions){
+    addAiMessage('You\'ve used all '+STATE.maxInteractions+' AI interactions this month. Upgrade to All Inclusive or wait for your monthly reset.');
+    return;
+  }
+
+  addUserMessage(q);
+  inp.value='';
+  autoResizeInput(inp);
+
+  // Add to history
+  STATE.chatHistory.push({role:'user',content:q});
+
+  showTyping();
+  var btn=document.getElementById('chatSendBtn');
+  if(btn)btn.disabled=true;
+
+  try{
+    var apiKey = plan==='pro'?'BACKEND_MANAGED':key;
+
+    // Build context from current bookmarks
+    var visibleBms=STATE.bookmarks.filter(function(b){
+      if(STATE.activeFolder!=='All'&&b.cat!==STATE.activeFolder)return false;
+      return true;
+    }).slice(0,80);
+
+    var ctx='You are an AI assistant helping manage X (Twitter) bookmarks for the Bookmarks for X app by Epiphany Apps.\n\n'+
+      'The user has '+visibleBms.length+' bookmarks currently visible.\n\n'+
+      'BOOKMARKS:\n'+
+      visibleBms.map(function(b,i){
+        return '['+(i+1)+'] @'+b.handle+' ['+b.cat+']: '+b.text+(b.link?' | '+b.link:'');
+      }).join('\n')+
+      '\n\nFOLDERS: '+STATE.folders.join(', ')+
+      '\n\nRules: Be concise. Reference bookmark numbers like [1], [2]. Suggest actions. If asked to organize or write, do it. We do not train on user data.';
+
+    var messages=STATE.chatHistory.slice(-20); // last 20 for context
+
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-client-side-api-key-allowed':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:ctx,
+        messages:messages
+      })
+    });
+
+    var data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    var text=(data.content&&data.content[0]&&data.content[0].text)||'No response';
+
+    hideTyping();
+    addAiMessage(text);
+
+    STATE.chatHistory.push({role:'assistant',content:text});
+    if(STATE.chatHistory.length>40)STATE.chatHistory=STATE.chatHistory.slice(-40);
+    setJSON('chatHistory',STATE.chatHistory);
+
+    STATE.chatInteractions++;
+    set('chatInteractions',STATE.chatInteractions.toString());
+    updateChatLabel();
+    trackPositiveAction();
+
+  }catch(e){
+    hideTyping();
+    addAiMessage('Error: '+e.message+'. Check your API key in Settings.');
+  }
+
+  if(btn)btn.disabled=false;
+}
+
+function addUserMessage(text){
+  var msgs=document.getElementById('chatMessages');
+  // Remove welcome if present
+  var welcome=msgs.querySelector('.chat-welcome');
+  if(welcome)welcome.remove();
+
+  var div=document.createElement('div');
+  div.className='msg user';
+  div.innerHTML='<div class="msg-bubble">'+esc(text)+'</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function addAiMessage(text){
+  var msgs=document.getElementById('chatMessages');
+  var div=document.createElement('div');
+  div.className='msg ai';
+  var formatted=text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>');
+  div.innerHTML='<div class="msg-sender" id="aiSenderLabel">'+((STATE.plan||get('plan'))==='pro'?'Claude ✨':'AI ✨')+'</div><div class="msg-bubble">'+formatted+'</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+var typingEl=null;
+function showTyping(){
+  var msgs=document.getElementById('chatMessages');
+  typingEl=document.createElement('div');
+  typingEl.className='msg ai';
+  typingEl.id='typingIndicator';
+  typingEl.innerHTML='<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(typingEl);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function hideTyping(){
+  var t=document.getElementById('typingIndicator');
+  if(t)t.remove();
+}
+
+// ══════════════════════════════════════════════
+// FOLDER MANAGER
+// ══════════════════════════════════════════════
+function showFolderManager(){
+  var fm=document.getElementById('folderManager');
+  if(fm)fm.style.display='flex';
+  renderFolderManager();
+}
+
+function hideFolderManager(){
+  var fm=document.getElementById('folderManager');
+  if(fm)fm.style.display='none';
+}
+
+function renderFolderManager(){
+  var el=document.getElementById('fmList');
+  if(!el)return;
+  var counts={};
+  STATE.bookmarks.forEach(function(b){counts[b.cat]=(counts[b.cat]||0)+1});
+
+  el.innerHTML=STATE.folders.filter(function(f){return f!=='All'}).map(function(f){
+    var cnt=counts[f]||0;
+    return '<div class="fm-item">'+
+      '<div class="fm-item-left"><div class="fm-item-name">'+esc(f)+'</div><div class="fm-item-count">'+cnt+' bookmarks</div></div>'+
+      '<div class="fm-item-actions">'+
+        '<button class="fm-btn" onclick="renameFolder(\''+esc(f)+'\')">Rename</button>'+
+        '<button class="fm-btn danger" onclick="deleteFolder(\''+esc(f)+'\')">Delete</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function addFolder(){
+  var inp=document.getElementById('fmAddInput');
+  var v=(inp.value||'').trim();
+  if(!v)return;
+  if(STATE.folders.indexOf(v)===-1){
+    STATE.folders.push(v);
+    setJSON('folders',STATE.folders);
+    renderFolderManager();
+    renderFolderTabs();
+    inp.value='';
+  }
+}
+
+function renameFolder(name){
+  var newName=prompt('Rename "'+name+'" to:',name);
+  if(!newName||!newName.trim()||newName===name)return;
+  newName=newName.trim();
+  STATE.folders=STATE.folders.map(function(f){return f===name?newName:f});
+  STATE.bookmarks=STATE.bookmarks.map(function(b){if(b.cat===name)b.cat=newName;return b});
+  if(STATE.activeFolder===name)STATE.activeFolder=newName;
+  setJSON('folders',STATE.folders);
+  setJSON('bm',STATE.bookmarks);
+  renderFolderManager();
+  renderFolderTabs();
+  renderBookmarks();
+  showToast('Renamed to "'+newName+'"');
+}
+
+function deleteFolder(name){
+  if(!confirm('Delete folder "'+name+'"? Bookmarks will move to Other.'))return;
+  STATE.folders=STATE.folders.filter(function(f){return f!==name});
+  if(!STATE.folders.includes('Other'))STATE.folders.push('Other');
+  STATE.bookmarks=STATE.bookmarks.map(function(b){if(b.cat===name)b.cat='Other';return b});
+  if(STATE.activeFolder===name)STATE.activeFolder='All';
+  setJSON('folders',STATE.folders);
+  setJSON('bm',STATE.bookmarks);
+  renderFolderManager();
+  renderFolderTabs();
+  renderBookmarks();
+  showToast('Folder deleted');
+}
+
+// ══════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════
+function updateSettingsStatus(){
+  var b=get('b'),c=get('c'),plan=STATE.plan||get('plan');
+  var user=STATE.user||getJSON('user',null);
+
+  var nameEl=document.getElementById('settingsName');
+  var emailEl=document.getElementById('settingsEmail');
+  if(nameEl&&user)nameEl.textContent=user.name||'Your Account';
+  if(emailEl&&user)emailEl.textContent=user.email||'';
+
+  var planEl=document.getElementById('settingsPlan');
+  var badgeEl=document.getElementById('settingsPlanBadge');
+  if(planEl)planEl.textContent=plan==='pro'?'All Inclusive — $19.99/mo':plan==='byok'?'Bring Your Own Key — $7.99/mo':'No plan selected';
+  if(badgeEl){badgeEl.textContent=plan==='pro'?'Pro':'Basic';badgeEl.className='settings-badge'+(plan==='pro'?' pro':'')}
+
+  var bearerEl=document.getElementById('settingsBearerStatus');
+  var apiEl=document.getElementById('settingsApiStatus');
+  if(bearerEl)bearerEl.textContent=b?'Connected ✓':'Not set';
+  if(apiEl)apiEl.textContent=c?'Connected ✓':'Not set';
+
+  var folderEl=document.getElementById('settingsFolderCount');
+  if(folderEl)folderEl.textContent=STATE.folders.filter(function(f){return f!=='All'}).length+' folders';
+
+  updateBackupStatus();
+}
+
+function updateBackupStatus(){
+  var connected=[];
+  ['gdrive','icloud','notion','dropbox','onedrive','mega'].forEach(function(s){
+    if(get(s+'-connected'))connected.push(s);
+  });
+  var el=document.getElementById('settingsBackupStatus');
+  if(el)el.textContent=connected.length?connected.join(', '):'No services connected';
+}
+
+function showKeysModal(){
+  var b=get('b'),u=get('u'),c=get('c');
+  openModal(
+    'API Keys',
+    'Leave blank to keep current value.',
+    '<div class="modal-field"><label>Bearer Token</label><input class="inp mono" id="modalBearer" type="password" placeholder="Leave blank to keep" value=""></div>'+
+    '<div class="modal-field"><label>X User ID</label><input class="inp" id="modalUserId" type="text" placeholder="Leave blank to keep" value="'+(u||'')+'"></div>'+
+    '<div class="modal-field"><label>AI API Key</label><input class="inp mono" id="modalApiKey" type="password" placeholder="Leave blank to keep" value=""></div>',
+    function(){
+      var nb=document.getElementById('modalBearer').value.trim();
+      var nu=document.getElementById('modalUserId').value.trim();
+      var nc=document.getElementById('modalApiKey').value.trim();
+      if(nb)set('b',nb);
+      if(nu)set('u',nu);
+      if(nc)set('c',nc);
+      showToast('Keys saved');
+      closeModal();
+      loadBookmarks();
+    }
+  );
+}
+
+function showBackupModal(){
+  var services=[
+    {id:'gdrive',name:'Google Drive',icon:'<svg width="20" height="20" viewBox="0 0 87.3 78"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z" fill="#4285f4"/><path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.35A9.06 9.06 0 000 52.8h27.5z" fill="#0066da"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.65z" fill="#ea4335"/><path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.9 0H34.4c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="M59.8 52.8H27.5L13.75 76.6c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.4 4.5-1.2z" fill="#2684fc"/><path d="M73.4 26.45l-12.7-22c-1.35-.8-2.9-1.2-4.5-1.2H30.9c-1.6 0-3.15.4-4.5 1.2l12.7 22 13.75 23.8z" fill="#00ac47"/></svg>'},
+    {id:'icloud',name:'iCloud',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>'},
+    {id:'notion',name:'Notion',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.934zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.887.747-.933z"/></svg>'},
+    {id:'dropbox',name:'Dropbox',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#0061FF"/><path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'},
+    {id:'onedrive',name:'OneDrive',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#0078D4"/><path d="M5 12l3.5-6L12 12l3.5-6L19 12l-3.5 2-4-2-4 2L5 12z" fill="white"/></svg>'},
+    {id:'mega',name:'Mega',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#D9272E"/><path d="M12 4l8 4-8 4-8-4 8-4zm0 8l8-4v8l-8 4-8-4V8l8 4z" fill="white"/></svg>'}
+  ];
+
+  var btns=services.map(function(s){
+    var connected=get(s.id+'-connected');
+    return '<button class="backup-btn-item'+(connected?' connected':'')+'" onclick="toggleBackup(\''+s.id+'\')">'+
+      s.icon+s.name+
+      '<span class="backup-status">'+(connected?'✓ Connected':'Connect')+'</span>'+
+    '</button>';
+  }).join('');
+
+  openModal('Backup & Export','Connect your cloud storage services.',btns,null,'Close');
+}
+
+function toggleBackup(service){
+  var connected=get(service+'-connected');
+  if(connected){
+    del(service+'-connected');
+    showToast(service+' disconnected');
+  } else {
+    set(service+'-connected','1');
+    showToast(service+' connected! Full OAuth in Phase 2.');
+  }
+  updateBackupStatus();
+  showBackupModal(); // re-render
+}
+
+function sendFeedback(type){
+  var subjects={bug:'Bug Report — Bookmarks for X',feature:'Feature Request — Bookmarks for X',feedback:'Feedback — Bookmarks for X'};
+  window.location.href='mailto:epiphanyapps@featurebase.app?subject='+encodeURIComponent(subjects[type]);
+}
+
+function signOut(){
+  if(!confirm('Sign out?'))return;
+  del('user');
+  STATE.user=null;
+  showMarketing();
+  showToast('Signed out');
+}
+
+function wipeAll(){
+  if(!confirm('Wipe ALL data and reset? This cannot be undone.'))return;
+  if(!confirm('Are you sure? All bookmarks and keys will be deleted.'))return;
+  ['b','u','c','plan','bm','folders','foldersConfigured','autoOrg','user','chatHistory','chatInteractions',
+   'gdrive-connected','icloud-connected','notion-connected','dropbox-connected','onedrive-connected','mega-connected'
+  ].forEach(del);
+  STATE.bookmarks=[];
+  STATE.chatHistory=[];
+  STATE.chatInteractions=0;
+  STATE.plan=null;
+  STATE.user=null;
+  hideSettings();
+  showMarketing();
+  showToast('All data wiped');
+}
+
+// ══════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════
+var modalCallback=null;
+
+function openModal(title,sub,content,onSave,saveLabel){
+  var overlay=document.getElementById('modalOverlay');
+  var sheet=document.getElementById('modalSheet');
+  if(!overlay||!sheet)return;
+  modalCallback=onSave||null;
+
+  var btns='';
+  if(onSave){
+    btns='<div class="modal-btns">'+
+      '<button class="modal-cancel" onclick="closeModal()">Cancel</button>'+
+      '<button class="modal-save" onclick="modalCallback&&modalCallback()">'+(saveLabel||'Save')+'</button>'+
+    '</div>';
+  } else {
+    btns='<div class="modal-btns">'+
+      '<button class="modal-save" onclick="closeModal()">'+(saveLabel||'Done')+'</button>'+
+    '</div>';
+  }
+
+  sheet.innerHTML='<div class="modal-handle"></div>'+
+    '<div class="modal-title">'+esc(title)+'</div>'+
+    (sub?'<p class="modal-sub">'+esc(sub)+'</p>':'')+
+    content+btns;
+
+  overlay.style.display='flex';
+}
+
+function closeModal(){
+  var overlay=document.getElementById('modalOverlay');
+  if(overlay)overlay.style.display='none';
+  modalCallback=null;
+}
+
+// ══════════════════════════════════════════════
+// RATING PROMPT
+// ══════════════════════════════════════════════
+function trackPositiveAction(){
+  STATE.ratingActions++;
+  if(STATE.ratingActions===3){
+    setTimeout(function(){
+      if(confirm('Enjoying Bookmarks for X? Rate us on the App Store — it helps a lot!')){
+        showToast('Thank you! Rating coming in v2 with Capacitor.');
+      }
+    }, 1000);
+  }
+}
+
+// ══════════════════════════════════════════════
+// PWA
+// ══════════════════════════════════════════════
+function wirePWA(){
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();
+    STATE.deferredPrompt=e;
+  });
+
+  var isInstalled=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(!isInstalled){setTimeout(showPWABanner,5000)}
+
+  var installBtn=document.getElementById('pwaInstallBtn');
+  var closeBtn=document.getElementById('pwaCloseBtn');
+
+  if(installBtn)installBtn.addEventListener('click',async function(){
+    if(STATE.deferredPrompt){
+      STATE.deferredPrompt.prompt();
+      var result=await STATE.deferredPrompt.userChoice;
+      if(result.outcome==='accepted'){
+        document.getElementById('pwaBanner').style.display='none';
+      }
+      STATE.deferredPrompt=null;
+    } else {
+      showToast('Tap Share → Add to Home Screen');
+    }
+  });
+
+  if(closeBtn)closeBtn.addEventListener('click',function(){
+    document.getElementById('pwaBanner').style.display='none';
+    setTimeout(showPWABanner,10000);
+  });
+}
+
+function showPWABanner(){
+  var isInstalled=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(isInstalled)return;
+  var banner=document.getElementById('pwaBanner');
+  var sub=document.getElementById('pwaSub');
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  if(sub)sub.textContent=ios?'Tap Share → Add to Home Screen':'Install for offline access';
+  if(banner)banner.style.display='flex';
+  setTimeout(function(){
+    if(banner)banner.style.display='none';
+    setTimeout(showPWABanner,10000);
+  },10000);
+}
+
+// ══════════════════════════════════════════════
+// SERVICE WORKER
+// ══════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').then(function(reg){
+      // Listen for updates
+      reg.addEventListener('updatefound',function(){
+        var newWorker=reg.installing;
+        newWorker.addEventListener('statechange',function(){
+          if(newWorker.state==='installed'&&navigator.serviceWorker.controller){
+            showToast('Update available — reload to get latest version');
+          }
+        });
+      });
+    }).catch(function(){});
+
+    // Listen for messages from SW
+    navigator.serviceWorker.addEventListener('message',function(e){
+      if(e.data&&e.data.type==='SYNC_BOOKMARKS')loadBookmarks();
+    });
+  });
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function esc(str){
+  return String(str||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// Prevent zoom on double tap (iOS)
+var lastTap=0;
+document.addEventListener('touchend',function(e){
+  var now=Date.now();
+  if(now-lastTap<300){e.preventDefault()}
+  lastTap=now;
+},{passive:false});
+
+// Prevent pull-to-refresh
+document.body.addEventListener('touchmove',function(e){
+  if(e.touches.length>1)e.preventDefault();
+},{passive:false});
+
+</script>
+</body>
+</html>
